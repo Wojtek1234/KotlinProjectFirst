@@ -15,34 +15,24 @@ import org.jetbrains.anko.uiThread
 
 class KotlinActivity : AppCompatActivity() {
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_kotlin)
         forecastList.layoutManager= LinearLayoutManager(this)
 
         async {
-            val result = RequestForecastCommand("00-544").execute()
+            val result = RequestForecastCommand("00544").execute()
             uiThread {
-                forecastList.adapter = ForecastListAdapter(result, {forecast->toast(forecast.date)})
+                forecastList.adapter = ForecastListAdapter(result) {forecast->toast(forecast.date)}
                 supportsLollipop{
                     toast("I am lollipop")
                 }
             }
         }
-
     }
-
 
     fun Context.toast(message: CharSequence, duration: Int = Toast.LENGTH_SHORT) {
         Toast.makeText(this, message, duration).show()
     }
-
-//    inline fun supportsLollipop(dupa: () -> Unit) {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            dupa()
-//        }
-//    }
-
 
 }
