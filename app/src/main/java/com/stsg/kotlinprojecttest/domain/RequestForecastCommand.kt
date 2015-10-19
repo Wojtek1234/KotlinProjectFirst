@@ -8,11 +8,13 @@ import com.stsg.kotlinprojecttest.network.ForecastRequest
  * Created by wojtek on 18.09.15.
  *STSG POLAND ALL RIGHTS RESERVED
  */
-class RequestForecastCommand(private val zipCode: Long) :
+class RequestForecastCommand(val zipCode: Long,
+                             val forecastProvider: ForecastProvider = ForecastProvider()) :
         Command<ForecastList> {
+    companion object {
+        val DAYS = 7
+    }
     override fun execute(): ForecastList {
-        val forecastRequest = ForecastRequest(zipCode)
-        return ForecastDataMapper().convertFromDataModel(zipCode,
-                forecastRequest.execute())
+        return forecastProvider.requestByZipCode(zipCode, DAYS)
     }
 }
